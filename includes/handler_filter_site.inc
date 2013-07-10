@@ -1,5 +1,7 @@
 <?php
 
+define('SEARCH_API_SITE_THIS_SITE_ONLY', 1);
+define('SEARCH_API_SITE_ALL_SITES', 2);
 /**
  * @file
  *   Contains the SearchApiSiteViewsHandler class.
@@ -16,8 +18,8 @@ class SearchApiSiteViewsHandler extends  views_handler_filter_boolean_operator {
 
 
     $form['value']['#options'] = array(
-      1 => t('This site only'),
-      2 => t('All sites')
+      SEARCH_API_SITE_THIS_SITE_ONLY => t('This site only'),
+      SEARCH_API_SITE_ALL_SITES => t('All sites')
     );
   }
 
@@ -25,7 +27,7 @@ class SearchApiSiteViewsHandler extends  views_handler_filter_boolean_operator {
    * Add this filter to the query.
    */
   public function query() {
-    if ($this->value) {
+    if ($this->value == SEARCH_API_SITE_THIS_SITE_ONLY) {
       $this->value = search_api_site_hash();
       $this->query->condition($this->real_field, $this->value, $this->operator, $this->options['group']);
     }
