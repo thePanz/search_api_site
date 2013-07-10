@@ -19,7 +19,6 @@ class SearchApiSiteViewsHandler extends  views_handler_filter_boolean_operator {
       1 => t('This site only'),
       2 => t('All sites')
     );
-    dpm($form);
   }
 
   /**
