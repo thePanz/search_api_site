@@ -39,6 +39,7 @@ class SearchApiSiteAddHash extends SearchApiAbstractAlterCallback {
     $new_items = array();
     foreach ($items as $id => &$item) {
       $item->search_api_site_hash = search_api_site_hash();
+      $item->search_api_id = search_api_site_hash() . $id;
       $new_items[search_api_site_hash() . $id] = $item;
     }
     #$items = $new_items;
@@ -51,7 +52,24 @@ class SearchApiSiteAddHash extends SearchApiAbstractAlterCallback {
         'description' => t('I Hash of the site which can then be used to limit results'),
         'type' => 'uri',
       ),
+      'search_api_site_id' => array(
+        'label' => t('Site item id'),
+        'description' => t('a unique id for the item'),
+        'type' => 'uri',
+      ),
     );
   }
 
+}
+
+/**
+ * implements hook_search_api_index_items_alter
+ *
+ * we do not know the index id in the allCallback object so we need to jump in here and add the value for the id
+ */
+function search_api_site_search_api_index_items_alter(array &$items, SearchApiIndex $index) {
+  foreach ($items as $id => $item) {
+    $hash = search_api_site_hash();
+    $item->search_api_site_id = "{$index->machine_name}-{$id}-{$hash}";
+  }
 }
